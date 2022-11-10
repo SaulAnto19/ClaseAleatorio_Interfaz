@@ -114,6 +114,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         btnSearch.setText("Buscar persona");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -143,6 +148,11 @@ public class Main extends javax.swing.JFrame {
         jLabel4.setText("Nombre de la persona a eliminar:");
 
         btnEliminar.setText("Eliminar persona");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -249,6 +259,37 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error en la escritura de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String nombre = txtBusqueda.getText().trim();
+        if(nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "¡No se ingreso el nombre de la persona!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        } 
+        try {
+            AccesoAleatorio.crearFileAlumno( new File("personas.dat") );
+            int i = AccesoAleatorio.buscarRegistro( nombre );
+            if(i==-1) {
+                JOptionPane.showMessageDialog(this, "Ningún registro coincide con los datos de búsqueda.", "Advertencia", JOptionPane.WARNING_MESSAGE);             
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "La primera coincidencia indica: "+AccesoAleatorio.getPersona(i), "Notificación", JOptionPane.INFORMATION_MESSAGE);
+            AccesoAleatorio.cerrar();
+        } catch(IOException e) {
+            JOptionPane.showMessageDialog(this, "Error en la búsqueda de registros.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+            AccesoAleatorio.crearFileAlumno(new File("personas.dat"));
+            if( AccesoAleatorio.eliminarPersona(campoEliminar.getText()) )
+                JOptionPane.showMessageDialog(this, "El registro correspondiente fue eliminado correctamente.", "Eliminación correcta", JOptionPane.INFORMATION_MESSAGE);
+            else JOptionPane.showMessageDialog(this, "Error al intentar eliminar un registro inexistente.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error en la eliminación de registros.", "Error", JOptionPane.ERROR_MESSAGE);
+        }     
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

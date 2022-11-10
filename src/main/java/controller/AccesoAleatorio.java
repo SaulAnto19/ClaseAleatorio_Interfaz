@@ -113,5 +113,30 @@ public class AccesoAleatorio {
     }
     
     /*buscar registro*/
+    
+    public static int buscarRegistro(String buscado) throws IOException {
+        Persona p;
+        if (buscado == null) {
+            return -1;
+        }
+        for(int i=0; i<getNumeroRegistros(); i++) {
+            flujo.seek(i * tamañoRegistro);
+            p = getPersona(i);
+            if(p.getNombre().equals(buscado) && p.isActivo()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     /*eliminar persona*/
+    
+    public static boolean eliminarPersona(String aEliminar) throws IOException {
+        int pos = buscarRegistro(aEliminar);
+        if(pos == -1) return false;
+        Persona personaEliminada = getPersona(pos);
+        personaEliminada.setActivo(false);
+        setPersona(pos, personaEliminada);
+        return true;
+    }
 }
